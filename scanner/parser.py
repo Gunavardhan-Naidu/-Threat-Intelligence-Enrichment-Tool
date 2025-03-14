@@ -1,7 +1,7 @@
 import logging
 import argparse
 import os
-
+import re
 # Reads file path
 def parse_indicators(inputs: list[str], file_path: str) -> list[tuple[str, str]]:
     indicators=[]
@@ -29,16 +29,18 @@ def parse_indicators(inputs: list[str], file_path: str) -> list[tuple[str, str]]
 #parses the input   
 def parse_line(line: str) -> list[tuple[str,str]]:
     parsed_data = []
-    parts = line.split(":", 1)
-
-    if len(parts) == 2:
-        input_type = parts[0].lower()
-        value = parts[1]
-        parsed_data.append((input_type, value))
-    else:
-        value = parts[0]
-        input_type = detect_input_type(value)
-        parsed_data.append((input_type, value))
+    for item in line.split(","):
+        item = item.strip()
+        if ":" in item and not re.match(r"\[.*\]", item):
+            parts = item.split(":", 1)
+            if len(parts) == 2:
+                input_type = parts[0].lower()
+                value = parts[1]
+                parsed_data.append((input_type, value))
+            else:
+                 value = parts[0]
+                 input_type = detect_input_type(value)
+                 parsed_data.append((input_type, value))
     return parsed_data
 
 #To detect what type of input (domain, url, ipaddress )

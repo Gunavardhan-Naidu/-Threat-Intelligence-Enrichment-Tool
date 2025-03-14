@@ -31,22 +31,19 @@ using external intelligence sources like WHOIS, VirusTotal, and other open APIs.
             "Examples:\n"
             "  python main.py -c google.com\n"
             "  python main.py -f input.txt\n"
-            "  python main.py -A\n"
+            "  python3 main.py -A domain:vit.ac.in\n"
         ),
     formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("-f", "--file", type=str, help="provide text file path as input")
-    parser.add_argument("-A", "--api", action="store_true", help="Run as API mode")
+    parser.add_argument("-A", "--api", type=str, help="Run as API mode")
     parser.add_argument("-c", "--custom", type=str, help="Provide the domain, ip, or URL as input")
     parser.add_argument("-o", "--output", help="Provide JSON file path")
     args = parser.parse_args()
-
 
    # If no arguments provided
     if len(vars(args)) == 0 or not any(vars(args).values()):
         parser.print_help()
         return
-
-
 
 #Assigning the Manager module to a variable  
     try:
@@ -64,6 +61,10 @@ using external intelligence sources like WHOIS, VirusTotal, and other open APIs.
         if args.custom:
             logging.info(f"proceesing your input: {args.custom}")
             indicators.extend(parse_line(args.custom))
+        
+        if args.api:
+            logging.info(f"processing your inout: {args.api}")
+            indicators.extend(parse_line(args.api))
 
         #checking if indicators are provided
         if not indicators:
