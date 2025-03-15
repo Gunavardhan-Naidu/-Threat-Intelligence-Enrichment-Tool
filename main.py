@@ -48,29 +48,16 @@ using external intelligence sources like WHOIS, VirusTotal, and other open APIs.
 #Assigning the Manager module to a variable  
     try:
         core = Manager()
-        logging.info("Manager object created")
         result = {}
         indicators = []
-        print(args)
-        
 
         if args.file:
             logging.info(f"File Path: {args.file}")
             indicators.extend(parse_indicators([], args.file))
-            logging.info(f"Parsed Indicators: {indicators}")
         
         if args.custom:
             logging.info(f"proceesing your input: {args.custom}")
             indicators.extend(parse_line(args.custom))
-            print(parse_line(args.custom))
-            # print(parse_line("domain:google.com"))    # [('domain', 'google.com')]
-            # print(parse_line("8.8.8.8"))              # [('ipaddress', '8.8.8.8')]
-            # print(parse_line("http://example.com"))   # [('url', 'http://example.com')]
-            # print(parse_line("google.com"))           # [('domain', 'google.com')]
-            # print(parse_line("unknown_input"))        # [('unknown', 'unknown_input')]
-            # print(parse_line("domain:google.com,8.8.8.8")) # [('domain', 'google.com'), ('ipaddress', '8.8.8.8')]
-
-            
         
         if args.api:
             logging.info(f"processing your inout: {args.api}")
@@ -83,7 +70,7 @@ using external intelligence sources like WHOIS, VirusTotal, and other open APIs.
         
         for input_type, value in indicators:
             try:
-                logging.info(f"Processing: {input_type}, {value}")
+                # logging.info(f"Processing: {input_type}, {value}")
                 data = core.controller(input_type, value)
                 logging.info(f"Result: {data}")
                 result[f"{input_type}: {value}"] = data

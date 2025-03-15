@@ -13,7 +13,7 @@ class Manager:
     def __init__(self):
         logging.info("Manager initialized")
     def controller(self, input_type: str, value: str) -> dict[str,any]:
-            logging.info(f"controller() called with: {input_type}, {value}")
+            # logging.info(f"controller() called with: {input_type}, {value}")
             result = {}
             try:
                 if input_type in ["ipaddress", "domain"]:
