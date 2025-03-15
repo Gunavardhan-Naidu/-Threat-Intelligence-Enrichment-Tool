@@ -30,6 +30,7 @@ def parse_indicators(inputs: list[str], file_path: str) -> list[tuple[str, str]]
 def parse_line(line: str) -> list[tuple[str,str]]:
     parsed_data = []
     for item in line.split(","):
+        print(item)
         item = item.strip()
         if ":" in item and not re.match(r"\[.*\]", item):
             parts = item.split(":", 1)
@@ -39,9 +40,14 @@ def parse_line(line: str) -> list[tuple[str,str]]:
                 parsed_data.append((input_type, value))
                 continue
 
-            input_type = detect_input_type(value)
-            parsed_data.append((input_type, value))
+            
+    if len(line.split(","))==1:
+        input_type = detect_input_type(line)
+        parsed_data.append((input_type, line))
+
+    print(parsed_data)
     return parsed_data
+     
 
 #To detect what type of input (domain, url, ipaddress )
 def detect_input_type(value: str) -> str:
