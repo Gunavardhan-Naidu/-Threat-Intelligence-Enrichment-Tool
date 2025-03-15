@@ -34,6 +34,9 @@ def vt_info(input_type:str,value: str) -> dict[str,any]:
     except Exception as e:
         logging.error(f"VirusTotal lookup failed for {value}: {str(e)}")
         return {"error": str(e)}
+    
+if client:
+        client.close()
         
 
         

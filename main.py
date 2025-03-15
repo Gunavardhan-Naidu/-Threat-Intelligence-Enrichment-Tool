@@ -16,21 +16,14 @@ logging.basicConfig(
 
 def main():
     parser = argparse.ArgumentParser(
-        # description=""" Threat Intelligence Enrichment Tool
-        # This tool enriches domains, IPs, and URLs with threat intelligence data.
-        
-        # Examples:
-        #     python main.py -c google.com
-        #     python main.py -f input.txt
-        #     python main.py -A""")
         description=(
             "Threat Intelligence Enrichment Tool\n"
             "--------------------------------------------------\n"
-           """A Python-based enrichment tool that gathers information about domains, IP addresses, and URLs 
-using external intelligence sources like WHOIS, VirusTotal, and other open APIs.\n\n"""
+           """A Python based tool that gathers information about domains, IP addresses, and URLs 
+using external sources like WHOIS, VirusTotal, and other open APIs.\n\n"""
             "Examples:\n"
-            "  python main.py -c google.com\n"
-            "  python main.py -f input.txt\n"
+            "  python3 main.py -c google.com\n"
+            "  python3 main.py -f input.txt\n"
             "  python3 main.py -A domain:vit.ac.in\n"
         ),
     formatter_class=argparse.RawTextHelpFormatter)
@@ -56,11 +49,11 @@ using external intelligence sources like WHOIS, VirusTotal, and other open APIs.
             indicators.extend(parse_indicators([], args.file))
         
         if args.custom:
-            logging.info(f"proceesing your input: {args.custom}")
+            logging.info(f"processing your input: {args.custom}")
             indicators.extend(parse_line(args.custom))
         
         if args.api:
-            logging.info(f"processing your inout: {args.api}")
+            logging.info(f"processing your input: {args.api}")
             indicators.extend(parse_line(args.api))
 
         #checking if indicators are provided

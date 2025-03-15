@@ -1,5 +1,6 @@
 from .whois_lookup import whois_info
 from .virustotal import vt_info
+from .abuseipdb import abuseipdb_info
 import logging
 
 
@@ -20,6 +21,9 @@ class Manager:
                      result["whois lookup data"] = whois_info(value)
                 
                 result["virustotal lookup data"] = vt_info(input_type, value)
+
+                if input_type in ["ipaddress"]:
+                     result["Abuseipdb"] = abuseipdb_info(value)
 
                 return result
             
