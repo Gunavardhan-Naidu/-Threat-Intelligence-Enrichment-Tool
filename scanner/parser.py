@@ -37,10 +37,10 @@ def parse_line(line: str) -> list[tuple[str,str]]:
                 input_type = parts[0].lower()
                 value = parts[1]
                 parsed_data.append((input_type, value))
-            else:
-                 value = parts[0]
-                 input_type = detect_input_type(value)
-                 parsed_data.append((input_type, value))
+                continue
+
+            input_type = detect_input_type(value)
+            parsed_data.append((input_type, value))
     return parsed_data
 
 #To detect what type of input (domain, url, ipaddress )
@@ -54,18 +54,15 @@ def detect_input_type(value: str) -> str:
     return "unknown"
 
 def valid_ip(ip: str) -> bool:
-    parts = ip.split(".")
-    if len(parts) != 4:
+    ip = ip.strip()
+    ip_regex = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
+    if not ip_regex.match(ip):
         return False
-    for part in parts:
-        if not part.isdigit() or not 0 <= int(part) <= 255:
-            return False
-    return True
+    parts = ip.split(".")
+    return all(0 <= int(part) <= 255 for part in parts)
 
 def valid_domain(domain: str) -> bool:
-    if len(domain) > 253 or len(domain) == 0:
-        return False
-    allowed_chars = "abcdefghijklmnopqrstuvwxyz0123456789-."
-    if all(c.lower() in allowed_chars for c in domain) and "." in domain:
-        return True
-    return False
+    domain_regex = re.compile(
+        r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(?:\.[A-Za-z]{2,})+$"
+    )
+    return bool(domain_regex.match(domain))

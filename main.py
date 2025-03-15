@@ -61,6 +61,15 @@ using external intelligence sources like WHOIS, VirusTotal, and other open APIs.
         if args.custom:
             logging.info(f"proceesing your input: {args.custom}")
             indicators.extend(parse_line(args.custom))
+            # print(parse_line(args.custom))
+            # print(parse_line("domain:google.com"))    # [('domain', 'google.com')]
+            # print(parse_line("8.8.8.8"))              # [('ipaddress', '8.8.8.8')]
+            # print(parse_line("http://example.com"))   # [('url', 'http://example.com')]
+            # print(parse_line("google.com"))           # [('domain', 'google.com')]
+            # print(parse_line("unknown_input"))        # [('unknown', 'unknown_input')]
+            # print(parse_line("domain:google.com,8.8.8.8")) # [('domain', 'google.com'), ('ipaddress', '8.8.8.8')]
+
+            
         
         if args.api:
             logging.info(f"processing your inout: {args.api}")
