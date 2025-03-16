@@ -1,9 +1,11 @@
 import argparse
 import json
 import logging
+import multiprocessing
 
 from scanner.parser import parse_indicators, parse_line
 from scanner.manager import Manager
+from scanner.multithreading import threading
 
 
 #logging module implementation
@@ -32,6 +34,7 @@ using external sources like WHOIS, VirusTotal, and other open APIs.\n\n"""
     parser.add_argument("-A", "--api", type=str, help="Run as API mode")
     parser.add_argument("-c", "--custom", type=str, help="Provide the domain, ip, or URL as input")
     parser.add_argument("-o", "--output", help="Provide JSON file path")
+    parser.add_argument("-m","--thread",type=int,help="multithreading")
     args = parser.parse_args()
 
    # If no arguments provided
@@ -48,7 +51,28 @@ using external sources like WHOIS, VirusTotal, and other open APIs.\n\n"""
         if args.file:
             logging.info(f"File Path: {args.file}")
             indicators.extend(parse_indicators([], args.file))
-        
+        if args.file and args.thread:
+            #find file length
+            with open(args.file, "r") as file:
+                lines = file.readlines()
+            size = len(lines)
+            threads = args.thread
+            chunk_size = size // threads
+            processes = []
+            #no of threads(input) if not (4)
+            # implement for looop down
+            #divide indicators line 0 to line 25
+            for i in range(threads):
+                    start = i * chunk_size
+                    # Ensure the last process takes any remaining lines
+                    end = size if i == threads - 1 else (i + 1) * chunk_size
+                    p = multiprocessing.Process(target=threading, args=(args.file, start, end))
+                    processes.append(p)
+                    p.start()
+
+                # Wait for all processes to complete
+            for p in processes:
+                    p.join()
         if args.custom:
             logging.info(f"processing your input: {args.custom}")
             indicators.extend(parse_line(args.custom))
