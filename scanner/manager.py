@@ -1,6 +1,7 @@
 from .whois_lookup import whois_info
 from .virustotal import vt_info
 from .abuseipdb import abuseipdb_info
+from .shodanmod import shodan_info
 import logging
 
 
@@ -19,17 +20,14 @@ class Manager:
             try:
                 if input_type in ["ipaddress", "domain"]:
                      result["whois lookup data"] = whois_info(value)
-                
-                result["virustotal lookup data"] = vt_info(input_type, value)
+                     result["shodan info"] = shodan_info(value)
 
                 if input_type in ["ipaddress"]:
                      result["Abuseipdb"] = abuseipdb_info(value)
-
+                result["virustotal lookup data"] = vt_info(input_type, value)
                 return result
-            
-
             except Exception as e:
-                 logging.error(f"Error in controller(whois){value}: {str(e)}")
+                 logging.error(f"Error in controller: {value}: {str(e)}")
                  return{"error": str(e)}
             
             

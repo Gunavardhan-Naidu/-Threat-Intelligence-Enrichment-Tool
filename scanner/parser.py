@@ -44,7 +44,7 @@ def parse_line(line: str) -> list[tuple[str,str]]:
     return parsed_data
      
 
-#To detect what type of input (domain, url, ipaddress )
+#detect what type of input (domain, url, ipaddress )
 def detect_input_type(value: str) -> str:
     if value.startswith(("http://", "https://")):
         return "url"

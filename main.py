@@ -25,6 +25,7 @@ using external sources like WHOIS, VirusTotal, and other open APIs.\n\n"""
             "  python3 main.py -c google.com\n"
             "  python3 main.py -f input.txt\n"
             "  python3 main.py -A domain:vit.ac.in\n"
+            "python3 main.py -c -o "
         ),
     formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("-f", "--file", type=str, help="provide text file path as input")
@@ -72,7 +73,15 @@ using external sources like WHOIS, VirusTotal, and other open APIs.\n\n"""
                 result[f"{input_type}:{value}"] = {"error": str(e)}
 
         output = json.dumps(result, indent = 2 , default=str)
-        print(output)
+
+        if args.output:
+          try:
+            with open(args.output, "w") as f:
+                f.write(output)
+          except Exception as e:
+            logging.error(f"Error writing to {args.output}: {str(e)}")
+        else:
+             print(output)
 
     except Exception as e:
         logging.error(f"Error during execution: {str(e)}")
