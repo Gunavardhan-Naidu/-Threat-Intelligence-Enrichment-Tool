@@ -7,7 +7,7 @@ using external sources like WHOIS, VirusTotal, Abusipdb, and other open source A
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/Gunavardhan-Naidu/-Threat-Intelligence-Enrichment-Tool.git
+   git clone https://github.com/Gunavardhan-Naidu/Threat-Intelligence-Enrichment-Tool.git
 
    cd Threat-Intelligence-Enrichment-Tool
 
@@ -33,22 +33,6 @@ using external sources like WHOIS, VirusTotal, Abusipdb, and other open source A
     python3 main.py -c <input> -o <output_file_path 
 
     python3 main.py -f <input_file_path> -t <no of threads> -o <output_file_path"
-
-5. **(Optional) Install as a Package**
-    ```bash
-    pip install .
-
-6. **You can then run the tool using**
-    ```bash
-    scanner -c google.com
-
-    scanner -f '/<file_path>/input.txt'
-
-    scanner -A domain:google.com
-
-    scanner -c <input> -o <output_file_path 
-
-    scanner -f <input_file_path> -t <no of threads> -o <output_file_path"
 
 ## Project Structure
 ```graphql

@@ -13,7 +13,7 @@ setup(
         "urllib3==2.3.0",
         "vt-py==0.19.0",
         "yarl==1.18.3",
-        "shodan==1.31.0"
+        "ipinfo==5.1.1"
     ],
     entry_points={
         "console_scripts": [
