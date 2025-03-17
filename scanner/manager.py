@@ -1,7 +1,7 @@
 from .whois_lookup import whois_info
 from .virustotal import vt_info
 from .abuseipdb import abuseipdb_info
-from .shodanmod import shodan_info
+from .ipinfo_lookup import ipinfo_info
 import logging
 
 
@@ -23,10 +23,10 @@ class Manager:
             try:
                 if input_type in ["ipaddress", "domain"]:
                      result["whois lookup data"] = whois_info(value)
-                     result["shodan info"] = shodan_info(value)
 
                 if input_type in ["ipaddress"]:
-                     result["Abuseipdb"] = abuseipdb_info(value)
+                     result["Abuseipdb lookup data"] = abuseipdb_info(value)
+                     result["ipinfo lookup data"] = ipinfo_info(value)
                 result["virustotal lookup data"] = vt_info(input_type, value)
                 return result
             except Exception as e:
