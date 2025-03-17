@@ -22,7 +22,9 @@ def vt_info(input_type:str,value: str) -> dict[str,any]:
             output = client.get_object(f"/ip_addresses/{value}")
             logging.info(f"Processing your ipaddress: {value}")
         else:
-            logging.error(f"Unsupported input type for VirusTotal")
+            error_msg = f"Unsupported input type for VirusTotal: {input_type}"
+            logging.error(error_msg)
+            return {"error": error_msg}
         
         vt_data = {
                 "last_analysis_stats": output.last_analysis_stats,
@@ -35,8 +37,8 @@ def vt_info(input_type:str,value: str) -> dict[str,any]:
         logging.error(f"VirusTotal lookup failed for {value}: {str(e)}")
         return {"error": str(e)}
     
-if client:
-        client.close()
+# if client:
+#         client.close()
         
 
         

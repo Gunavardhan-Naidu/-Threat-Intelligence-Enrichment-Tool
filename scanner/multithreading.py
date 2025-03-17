@@ -3,7 +3,7 @@ import os
 from scanner.manager import Manager
 from scanner.parser import parse_line
 
-def threading(file_path,start,end):
+def threading(file_path:str,start:int,end:int, shared_results:dict):
     indicators=[]
     if file_path:
         file_path = file_path.strip()
@@ -17,8 +17,9 @@ def threading(file_path,start,end):
     try:
         with open(file_path, "r") as file:
             for line in file:
-                lines = line.strip()
-                indicators.extend(line)
+                # lines = line.strip()
+                # indicators.extend(line)
+                lines = [line.strip() for line in file if line.strip()]
     except Exception as e:
         logging.error(f"Error file not found {file_path}: {e}")
         return indicators
@@ -35,7 +36,7 @@ def threading(file_path,start,end):
         end = size
 
     core = Manager()
-    result={}
+    
     for line in lines[start:end]:
         line = line.strip()
         if not line:
@@ -47,10 +48,12 @@ def threading(file_path,start,end):
                 # logging.info(f"Processing: {input_type}, {value}")
                 data = core.controller(input_type, value)
                 logging.info(f"Result: {data}")
-                result[f"{input_type}: {value}"] = data
+                shared_results[f"{input_type}: {value}"] = data
             except Exception as e:
                 logging.error(f"Error processing {input_type}:{value}: {str(e)}")
-                result[f"{input_type}:{value}"] = {"error": str(e)}
+                shared_results[f"{input_type}: {value}"] = {"error": str(e)}
+        
+            
       
 
     

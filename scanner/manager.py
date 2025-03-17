@@ -17,6 +17,9 @@ class Manager:
     def controller(self, input_type: str, value: str) -> dict[str,any]:
             # logging.info(f"controller() called with: {input_type}, {value}")
             result = {}
+            if input_type == "unknown":
+                logging.info(f"Skipping unknown input type for value: {value}")
+                return {"skipped": "unknown input type"}
             try:
                 if input_type in ["ipaddress", "domain"]:
                      result["whois lookup data"] = whois_info(value)

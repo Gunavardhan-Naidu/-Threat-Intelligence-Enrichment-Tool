@@ -3,6 +3,7 @@ import argparse
 import os
 import re
 # Reads file path
+
 def parse_indicators(inputs: list[str], file_path: str) -> list[tuple[str, str]]:
     indicators=[]
     
