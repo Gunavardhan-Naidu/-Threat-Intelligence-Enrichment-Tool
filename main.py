@@ -60,6 +60,10 @@ using external sources like WHOIS, VirusTotal, Abusipdb, and other open source A
             segment = size // threads
             processes = []
             temp_files = []
+
+            out_dir = os.path.dirname(args.output) if args.output else "."
+            if out_dir and not os.path.exists(out_dir):
+                 os.makedirs(out_dir)
             #no of threads(input) if not (0)
             # implement for looop down
             #divide indicators start to end
