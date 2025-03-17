@@ -15,13 +15,13 @@ def vt_info(input_type:str,value: str) -> dict[str,any]:
             if input_type == "url":
                 url_id = vt.url_id(value)
                 output = client.get_object(f"/urls/{url_id}")
-                logging.info(f"Processing your URL: {url_id}")
+                # logging.info(f"Processing your URL: {url_id}")
             elif input_type == "domain":
                 output = client.get_object(f"/domains/{value}")
-                logging.info(f"Processing your domain: {value}")
+                # logging.info(f"Processing your domain: {value}")
             elif input_type == "ipaddress":
                 output = client.get_object(f"/ip_addresses/{value}")
-                logging.info(f"Processing your ipaddress: {value}")
+                # logging.info(f"Processing your ipaddress: {value}")
             else:
                 error_msg = f"Unsupported input type for VirusTotal: {input_type}"
                 logging.error(error_msg)

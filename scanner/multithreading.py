@@ -1,9 +1,10 @@
 import logging
 import os
+import json
 from scanner.manager import Manager
 from scanner.parser import parse_line
 
-def threading(file_path:str,start:int,end:int, shared_results:dict):
+def threading(file_path:str,start:int,end:int, output_file:str):
     indicators=[]
     if file_path:
         file_path = file_path.strip()
@@ -36,6 +37,7 @@ def threading(file_path:str,start:int,end:int, shared_results:dict):
         end = size
 
     core = Manager()
+    results = {}
     
     for line in lines[start:end]:
         line = line.strip()
@@ -48,10 +50,15 @@ def threading(file_path:str,start:int,end:int, shared_results:dict):
                 # logging.info(f"Processing: {input_type}, {value}")
                 data = core.controller(input_type, value)
                 logging.info(f"Result: {data}")
-                shared_results[f"{input_type}: {value}"] = data
+                results[f"{input_type}: {value}"] = data
             except Exception as e:
                 logging.error(f"Error processing {input_type}:{value}: {str(e)}")
-                shared_results[f"{input_type}: {value}"] = {"error": str(e)}
+                results[f"{input_type}: {value}"] = {"error": str(e)}
+        try:
+            with open(output_file, "w") as f:
+                json.dump(results, f, indent=2, default=str)
+        except Exception as e:
+                 logging.error(f"Error writing to temporary file {output_file}: {str(e)}")
         
             
       

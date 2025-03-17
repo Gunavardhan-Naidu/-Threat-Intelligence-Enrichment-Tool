@@ -2,6 +2,7 @@ import argparse
 import json
 import logging
 import multiprocessing
+import os
 
 from scanner.parser import parse_indicators, parse_line
 from scanner.manager import Manager
@@ -58,8 +59,7 @@ using external sources like WHOIS, VirusTotal, Abusipdb, and other open source A
             threads = args.thread
             segment = size // threads
             processes = []
-            mp_manager = multiprocessing.Manager()
-            shared_results = mp_manager.dict()
+            temp_files = []
             #no of threads(input) if not (0)
             # implement for looop down
             #divide indicators start to end
@@ -67,7 +67,9 @@ using external sources like WHOIS, VirusTotal, Abusipdb, and other open source A
                 for i in range(threads):
                         start = i * segment
                         end = size if i == threads - 1 else (i + 1) * segment
-                        p = multiprocessing.Process(target=threading, args=(args.file, start, end, shared_results))
+                        temp_filename = f"temp_output_{i}.json"
+                        temp_files.append(temp_filename)
+                        p = multiprocessing.Process(target=threading, args=(args.file, start, end, temp_filename))
                         processes.append(p)
                         p.start()
 
@@ -81,7 +83,17 @@ using external sources like WHOIS, VirusTotal, Abusipdb, and other open source A
                     p.terminate()
                 for p in processes:
                     p.join()
-            output= json.dumps(shared_results, indent= 2 , default=str)
+
+            combined_results = {}
+            for temp_file in temp_files:
+                if os.path.exists(temp_file):
+                    try:
+                        with open(temp_file, "r") as f:
+                            partial = json.load(f)
+                            combined_results.update(partial)
+                    except Exception as e:
+                        logging.error(f"Error reading temporary file {temp_file}: {str(e)}")
+            output = json.dumps(combined_results, indent=2, default=str)
 
 #if threads not provided
         else:
@@ -100,17 +112,19 @@ using external sources like WHOIS, VirusTotal, Abusipdb, and other open source A
             if not indicators:
                 logging.error("No valid indicators provided")
                 return
-            
-            for input_type, value in indicators:
-                try:
-                    # logging.info(f"Processing: {input_type}, {value}")
-                    data = core.controller(input_type, value)
-                    # logging.info(f"Result: {data}")
-                    result[f"{input_type}: {value}"] = data
+            try:
+                for input_type, value in indicators:
+                    try:
+                        # logging.info(f"Processing: {input_type}, {value}")
+                        data = core.controller(input_type, value)
+                        # logging.info(f"Result: {data}")
+                        result[f"{input_type}: {value}"] = data
 
-                except Exception as e:
-                    logging.error(f"Error processing {input_type}:{value}: {str(e)}")
-                    result[f"{input_type}:{value}"] = {"error": str(e)}
+                    except Exception as e:
+                        logging.error(f"Error processing {input_type}:{value}: {str(e)}")
+                        result[f"{input_type}:{value}"] = {"error": str(e)}
+            except KeyboardInterrupt:
+                logging.info("KeyboardInterrupt caught, terminating processes...")
 
             output = json.dumps(result, indent = 2 , default=str)
 
