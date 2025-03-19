@@ -9,7 +9,7 @@ def vt_info(input_type:str,value: str) -> dict[str,any]:
     if not vt.Client:
         logging.error(f"VirusTotal API not configured")
     try:
-        with vt.Client("c4c2a41ac4883fcda437895ea17653e463e415ddeca7b1edd9debe2e8e6816ff") as client:
+        with vt.Client("") as client:
 
             #import base64 > url_id = base64.urlsafe_b64encode("http://www.somedomain.com/this/is/my/url".encode()).decode().strip("=")
             if input_type == "url":
