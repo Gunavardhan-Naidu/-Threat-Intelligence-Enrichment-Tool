@@ -1,7 +1,7 @@
 import ipinfo
 import logging
 
-access_token = '1cc9aca75e1842'
+access_token = ''
 
 
 def ipinfo_info(value:str) -> dict[str,str]:
